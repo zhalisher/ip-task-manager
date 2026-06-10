@@ -1,0 +1,15 @@
+# ENV
+.env
+.env.*
+!.env.example
+
+# Binaries
+bin/
+
+# Go
+tmp/
+dist/
+
+# Logs
+*.log
+logs/
