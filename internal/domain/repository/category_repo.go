@@ -12,4 +12,5 @@ type CategoryRepository interface {
 	Update(ctx context.Context, category *model.Category) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetByID(ctx context.Context, id uuid.UUID) (*model.Category, error)
+	GetAll(ctx context.Context, userID uuid.UUID) ([]*model.Category, error)
 }
