@@ -76,7 +76,7 @@ func (r *taskRepository) GetAll(ctx context.Context, userID uuid.UUID, filter re
 	}
 	defer rows.Close()
 
-	var tasks []*model.Task
+	tasks := make([]*model.Task, 0)
 	for rows.Next() {
 		task := &model.Task{}
 		rows.Scan(&task.ID, &task.UserID, &task.CategoryID, &task.Title, &task.Description, &task.Status, &task.Priority,
