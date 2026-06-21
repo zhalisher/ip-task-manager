@@ -52,7 +52,7 @@ func (r *categoryRepository) GetByID(ctx context.Context, id uuid.UUID) (*model.
 	err := r.db.QueryRow(ctx,
 		`SELECT id, user_id, name, color, created_at, updated_at FROM categories WHERE id=$1`,
 		id,
-	).Scan(&category.ID, &category.UserID, &category.Name, &category.CreatedAt, &category.UpdatedAt)
+	).Scan(&category.ID, &category.UserID, &category.Name, &category.Color, &category.CreatedAt, &category.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +68,7 @@ func (r *categoryRepository) GetAll(ctx context.Context, userID uuid.UUID) ([]*m
 		return nil, err
 	}
 	defer rows.Close()
-
-	var categories []*model.Category
+	categories := make([]*model.Category, 0)
 	for rows.Next() {
 		category := &model.Category{}
 		err := rows.Scan(&category.ID, &category.UserID, &category.Name, &category.Color,
