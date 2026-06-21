@@ -30,9 +30,15 @@ func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "name and color are required", http.StatusBadRequest)
 		return
 	}
-	err := h.categoryUsecase.Create(r.Context(), &model.Category{
-		Name:  req.Name,
-		Color: req.Color,
+	userID, err := getUserIDFromContext(r.Context())
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+	err = h.categoryUsecase.Create(r.Context(), &model.Category{
+		UserID: userID,
+		Name:   req.Name,
+		Color:  req.Color,
 	})
 	if err != nil {
 		http.Error(w, "something went wrong", http.StatusBadRequest)
@@ -54,7 +60,14 @@ func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "name and color are required", http.StatusBadRequest)
 		return
 	}
-	err := h.categoryUsecase.Update(r.Context(), &model.Category{
+	idStr := r.PathValue("id")
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	err = h.categoryUsecase.Update(r.Context(), &model.Category{
+		ID:    id,
 		Name:  req.Name,
 		Color: req.Color,
 	})
