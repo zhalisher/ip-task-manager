@@ -28,6 +28,10 @@ func (h *TaskHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Priority    string    `json:"priority"`
 		DueDate     time.Time `json:"due_date"`
 	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
 	if req.Title == "" || req.Status == "" || req.Priority == "" {
 		http.Error(w, "several fields are missing", http.StatusBadRequest)
 		return
