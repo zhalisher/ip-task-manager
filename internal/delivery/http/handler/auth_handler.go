@@ -58,7 +58,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	accessToken, refreshToken, err := h.authUsecase.Login(r.Context(), req.Email, req.Password)
 
 	if err != nil {
-		http.Error(w, "something went wrong", http.StatusBadRequest)
+		http.Error(w, "invalid email or password", http.StatusUnauthorized)
 		return
 	}
 
