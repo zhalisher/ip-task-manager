@@ -1,4 +1,10 @@
 services:
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "5500:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
   postgress:
     image: postgres:16
     container_name: ip-tm-postgres
