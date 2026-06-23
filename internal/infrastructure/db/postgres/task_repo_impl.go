@@ -67,15 +67,18 @@ func (r *taskRepository) GetByID(ctx context.Context, id uuid.UUID) (*model.Task
 func (r *taskRepository) GetAll(ctx context.Context, userID uuid.UUID, filter repository.TaskFilter) ([]*model.Task, error) {
 	rows, err := r.db.Query(ctx,
 		`SELECT id, user_id, category_id, title, description, status, priority, due_date, created_at, updated_at
-		FROM tasks WHERE user_id=$1 AND status=$2 AND priority=$3 AND title ILIKE $4
+		FROM tasks
+		WHERE user_id=$1
+		AND ($2 = '' OR status = $2)
+		AND ($3 = '' OR priority = $3)
+		AND ($4 = '' OR title ILIKE '%' || $4 || '%')
 		ORDER BY created_at DESC LIMIT $5 OFFSET $6`,
-		userID, filter.Status, filter.Priority, "%"+filter.Search+"%", filter.Limit, (filter.Page-1)*filter.Limit,
+		userID, filter.Status, filter.Priority, filter.Search, filter.Limit, (filter.Page-1)*filter.Limit,
 	)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
 	tasks := make([]*model.Task, 0)
 	for rows.Next() {
 		task := &model.Task{}
