@@ -3,10 +3,12 @@ package usecase
 import (
 	"context"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/zhalisher/ip-task-manager/internal/domain/model"
 	"github.com/zhalisher/ip-task-manager/internal/domain/repository"
 	"golang.org/x/crypto/bcrypt"
@@ -34,6 +36,9 @@ func (u *authUsecase) Register(ctx context.Context, email, password, name string
 	if err == nil {
 		return nil, errors.New("email already exists")
 	}
+	if !errors.Is(err, pgx.ErrNoRows) {
+		return nil, err
+	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
@@ -51,6 +56,7 @@ func (u *authUsecase) Register(ctx context.Context, email, password, name string
 func (u *authUsecase) Login(ctx context.Context, email, password string) (accessToken, refreshToken string, err error) {
 	user, err := u.userRepo.GetByEmail(ctx, email)
 	if err != nil {
+		log.Printf("Login GetByEmail error: %v", err)
 		return "", "", errors.New("invalid email or password")
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
