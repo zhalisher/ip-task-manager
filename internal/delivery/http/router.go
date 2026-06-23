@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/zhalisher/ip-task-manager/internal/delivery/http/handler"
 	"github.com/zhalisher/ip-task-manager/internal/middleware"
 )
@@ -13,14 +14,20 @@ func NewRouter(
 	jwtSecret string,
 ) *chi.Mux {
 	r := chi.NewRouter()
-	r.Use(middleware.Recovery)
 
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Authorization", "Content-Type"},
+	}))
+	r.Use(middleware.Recovery)
 	// public routes
 	r.Post("/auth/register", authHandler.Register)
 	r.Post("/auth/login", authHandler.Login)
 
 	// secuired routes
 	r.Group(func(r chi.Router) {
+
 		r.Use(middleware.Auth(jwtSecret))
 
 		r.Post("/tasks", taskHandler.Create)
