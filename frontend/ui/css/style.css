@@ -189,3 +189,18 @@ button {
     font-style: italic;
     margin-top: 0.5rem;
 }
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+.profile-field label {
+    font-size: 0.85rem;
+    color: #888;
+}
+.profile-field p {
+    font-size: 1rem;
+    font-weight: 500;
+}

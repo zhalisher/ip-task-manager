@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="../css/style.css" />
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul class="header-nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="#" id="logout-btn">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="panel">
+                <h3>New Category</h3>
+                <div class="row">
+                    <input
+                        type="text"
+                        id="cat-name"
+                        placeholder="Category name"
+                    />
+                    <input type="color" id="cat-color" value="#4f46e5" />
+                    <button id="add-category-btn">Add Category</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>New Task</h3>
+                <div class="row">
+                    <input type="text" id="task-title" placeholder="Title" />
+                    <input
+                        type="text"
+                        id="task-desc"
+                        placeholder="Description"
+                    />
+                    <select id="task-category"></select>
+                    <select id="task-status">
+                        <option value="todo">Todo</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="done">Done</option>
+                    </select>
+                    <select id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <input type="date" id="task-due" />
+                    <button id="add-task-btn">Add Task</button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" id="search" placeholder="Search tasks..." />
+                <select id="status-filter">
+                    <option value="">All statuses</option>
+                    <option value="todo">Todo</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="done">Done</option>
+                </select>
+                <select id="priority-filter">
+                    <option value="">All priorities</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <div id="categories-container"></div>
+        </main>
+        <script src="../../js/api.js"></script>
+        <script src="../../js/script.js"></script>
+    </body>
+</html>
