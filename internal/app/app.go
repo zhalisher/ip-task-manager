@@ -30,14 +30,16 @@ func Run(cfg *config.Config) {
 	authUsecase := usecase.NewAuthUsecase(userRepo, cfg.JWTSecret, cfg.JWTAccessExpMin)
 	taskUsecase := usecase.NewTaskUsecase(taskRepo)
 	categoryUsecase := usecase.NewCategoryUsecase(categoryRepo)
+	userUsecase := usecase.NewUserUsecase(userRepo)
 
 	// handlers
 	authHandler := handler.NewAuthHandler(authUsecase)
 	taskHandler := handler.NewTaskHandler(taskUsecase)
 	categoryHandler := handler.NewCategoryHandler(categoryUsecase)
+	userHandler := handler.NewUserHandler(userUsecase)
 
 	// router
-	router := delivery.NewRouter(authHandler, taskHandler, categoryHandler, cfg.JWTSecret)
+	router := delivery.NewRouter(authHandler, taskHandler, categoryHandler, userHandler, cfg.JWTSecret)
 
 	// server
 	log.Println("server running on :8080")

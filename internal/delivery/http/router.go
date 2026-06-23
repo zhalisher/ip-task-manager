@@ -11,6 +11,7 @@ func NewRouter(
 	authHandler *handler.AuthHandler,
 	taskHandler *handler.TaskHandler,
 	categoryHandler *handler.CategoryHandler,
+	userHandler *handler.UserHandler,
 	jwtSecret string,
 ) *chi.Mux {
 	r := chi.NewRouter()
@@ -29,6 +30,7 @@ func NewRouter(
 	r.Group(func(r chi.Router) {
 
 		r.Use(middleware.Auth(jwtSecret))
+		r.Get("/profile", userHandler.GetProfile)
 
 		r.Post("/tasks", taskHandler.Create)
 		r.Get("/tasks", taskHandler.GetAll)
