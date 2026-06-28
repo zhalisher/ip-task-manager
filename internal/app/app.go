@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/zhalisher/ip-task-manager/config"
@@ -42,8 +43,12 @@ func Run(cfg *config.Config) {
 	router := delivery.NewRouter(authHandler, taskHandler, categoryHandler, userHandler, cfg.JWTSecret)
 
 	// server
-	log.Println("server running on :8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("server running on :%s", port)
+	if err := http.ListenAndServe(":"+port, router); err != nil {
 		log.Fatalf("server error: %v", err)
 	}
 }
